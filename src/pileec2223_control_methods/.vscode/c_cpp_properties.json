@@ -1,0 +1,29 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/ze/kira_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/ze/kira_ws/src/pileec2223_move_robot/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/5dpo_driver_laser_2d/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/5dpo_msl_ros_driver/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/5dpo_q2_ros_driver/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/5dpo_ratf_ros_driver/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/localization/5dpo_ros_odom/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/5dpo_ros_serial_port/include/**",
+        "/home/ze/kira_ws/src/5dpo_ros/drivers/serial_communication_channels/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
