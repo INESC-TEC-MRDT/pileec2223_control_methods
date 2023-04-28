@@ -1,0 +1,12 @@
+<launch>
+<arg name="robot_id" value="$(optenv ROBOT_ID unnamed_robot)"/>
+<!-- Follow_Path -->
+  <group ns="$(arg robot_id)">
+    <node pkg="pileec2223_control_methods" type="Follow_Path"
+        name="Follow_Path" clear_params="true"
+        output="$(optenv ROBOT_OUTPUT screen)">
+      <rosparam command="load" subst_value="True"
+          file="$(find pileec2223_control_methods)/config/Follow_Path.yaml"/>
+    </node>
+  </group>
+</launch>
