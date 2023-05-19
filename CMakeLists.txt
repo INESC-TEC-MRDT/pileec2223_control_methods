@@ -156,6 +156,11 @@ add_executable(GoToXY
   ${PROGRAM_HEADERS}
   src/main_GoToXY.cpp
 )
+add_executable(Follow_Circle
+  ${PROGRAM_SOURCES}
+  ${PROGRAM_HEADERS}
+  src/main_Follow_Circle.cpp
+)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -175,6 +180,9 @@ target_link_libraries(Follow_Path
   ${catkin_LIBRARIES}
 )
 target_link_libraries(GoToXY
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(Follow_Circle
   ${catkin_LIBRARIES}
 )
 

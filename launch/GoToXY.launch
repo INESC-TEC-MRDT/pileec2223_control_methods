@@ -1,0 +1,27 @@
+<launch>
+<arg name="robot_id" value="$(optenv ROBOT_ID unnamed_robot)"/>
+
+  <!-- HANGFA DISCOVERY Q2 ROS SPECIFIC PKGS -->
+  <include file="$(find sdpo_q2_ros_nav_conf)/launch/drivers/robot_omni4_gazebo_driver/run_robot_omni4_gazebo_driver.launch"/>
+  <include file="$(find sdpo_q2_ros_nav_conf)/launch/drivers/robot_omni4_description/run_robot_omni4_description.launch"/>
+  <include file="$(find sdpo_q2_ros_nav_conf)/launch/localization/sdpo_ros_odom/run_sdpo_ros_odom_wh.launch"/>
+  
+
+  <!-- RVIZ -->
+  <group ns="$(arg robot_id)">
+    <node pkg="rviz" type="rviz" name="rviz"
+        args="-d $(find pileec2223_control_methods)/config/rviz.rviz"
+        clear_params="true" output="$(optenv ROBOT_OUTPUT screen)">
+    </node>
+  </group>
+
+<!-- Follow_Path -->
+  <group ns="$(arg robot_id)">
+    <node pkg="pileec2223_control_methods" type="GoToXY"
+        name="GoToXY" clear_params="true"
+        output="$(optenv ROBOT_OUTPUT screen)">
+      <rosparam command="load" subst_value="True"
+          file="$(find pileec2223_control_methods)/config/GoToXY.yaml"/>
+    </node>
+  </group>
+</launch>

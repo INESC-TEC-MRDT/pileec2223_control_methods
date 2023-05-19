@@ -1,0 +1,5 @@
+# Put here the parameters to set in your node
+example_param_1: "example_param_1"
+param_v_linear: 0.4
+param_v_rot: 0.4
+param_slowdown_rate: 3
