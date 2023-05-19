@@ -1,5 +1,5 @@
 <launch>
-  <arg name="robot_id" value="$(optenv ROBOT_ID unnamed_robot)"/>
+<arg name="robot_id" value="$(optenv ROBOT_ID unnamed_robot)"/>
 
   <!-- HANGFA DISCOVERY Q2 ROS SPECIFIC PKGS -->
   <include file="$(find sdpo_q2_ros_nav_conf)/launch/drivers/robot_omni4_gazebo_driver/run_robot_omni4_gazebo_driver.launch"/>
@@ -15,9 +15,13 @@
     </node>
   </group>
 
-  <!-- Control_Method -->
-  <include file="$(dirname)/GoToXY/GoToXY.launch"/>
-  <!-- <include file="$(dirname)/Follow_Line/Follow_Line.launch"/> -->
-  <!-- <include file="$(dirname)/Follow_Path/Follow_Path.launch"/> -->
-  <!-- <include file="$(dirname)/GoToXY/GoToXY.launch"/> -->
+<!-- Follow_Circle -->
+  <group ns="$(arg robot_id)">
+    <node pkg="pileec2223_control_methods" type="Follow_Circle"
+        name="Follow_Circle" clear_params="true"
+        output="$(optenv ROBOT_OUTPUT screen)">
+      <rosparam command="load" subst_value="True"
+          file="$(find pileec2223_control_methods)/config/Follow_Circle.yaml"/>
+    </node>
+  </group>
 </launch>
