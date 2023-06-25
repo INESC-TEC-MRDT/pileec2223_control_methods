@@ -62,6 +62,7 @@ void Follow_Circle::subGoal(const geometry_msgs::PoseStamped& msg_goal) {
            tf::getYaw(msg_goal.pose.orientation) * 180.0 / M_PI);
 
   // Update the internal state of the class with the new goal
+  choice=0;
   goal_mtx_.lock();
   goal_ = msg_goal;
   goal_mtx_.unlock();
@@ -82,11 +83,13 @@ void Follow_Circle::subOdom(const nav_msgs::Odometry& msg_odom) {
 
 void Follow_Circle::update(const nav_msgs::Odometry& msg_odom)
 {
-  const double d_erro_max=0.1,d_erro_de_max=0.5,o_erro_max=0.05,o_erro_de_max=0.1;
+  const double d_erro_max=0.3,d_erro_de_max=1,o_erro_max=0.05,o_erro_de_max=0.1;
   double xf=goal_.pose.position.x,yf=goal_.pose.position.y,xc=0.00000001,yc=0.00000001,xodom=msg_odom.pose.pose.position.x,yodom=msg_odom.pose.pose.position.y;
   double ux=0,uy=0,pix=0,piy=0,R=0,alfa=0,beta=0,error_dist=0,dist_to_line=0,o_dif=0,vlinx=0,vliny=0, deltavlin=0;
-  double odom_rot = tf::getYaw(msg_odom.pose.pose.orientation), final_rot = tf::getYaw(goal_.pose.orientation);
+  double odom_rot = normAngRad(tf::getYaw(msg_odom.pose.pose.orientation)), final_rot = normAngRad(tf::getYaw(goal_.pose.orientation));
   
+  ROS_INFO("GOAL: (%F , %F)",xf,yf);
+
   R = sqrt(pow(xc-xf,2) + pow(yc - yf,2));
   ux = (xodom-xc)/sqrt(pow(xodom-xc,2) + pow(yodom - yc,2));
   uy = (yodom-yc)/sqrt(pow(xodom-xc,2) + pow(yodom - yc,2));
@@ -97,21 +100,30 @@ void Follow_Circle::update(const nav_msgs::Odometry& msg_odom)
   beta = atan2(yf - yc, xf - xc);
   if(beta < alfa)
   {
-    beta = beta + 2*M_PI;
+    beta = normAngRad(beta + 2*M_PI);
   } 
-  error_dist = (beta-alfa)*R;
-  alfa = alfa + M_PI/2;
-  
-  o_dif = final_rot - odom_rot;
-  
-  if(o_dif > M_PI) 
-  {  
-      o_dif -= 2*M_PI;
-  }
-  if(o_dif < -M_PI)
+  error_dist = sqrt(pow(xodom-xf,2) + pow(yodom - yf,2));
+
+  if(alfa >= 0 && choice==0)
   {
-      o_dif += 2*M_PI;
+    choice=1;
   }
+  else
+  {
+    choice=2;
+  }
+
+  if(choice==1)
+  {
+    alfa = normAngRad(alfa - M_PI/2);
+  }
+  else
+  {
+    alfa = normAngRad(alfa + M_PI/2);
+  }
+  
+  
+  o_dif = normAngRad(final_rot - odom_rot);
 
   if (o_dif > 0)
   {
