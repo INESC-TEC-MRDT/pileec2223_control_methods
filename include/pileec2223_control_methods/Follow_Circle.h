@@ -35,7 +35,7 @@ class Follow_Circle {
 
   double vx, vy, w;
   double V_LINEAR,V_ROT,SLOWDOWN;
-  int ROTATION_DIRECTION;
+  int ROTATION_DIRECTION, choice;
 
   stateNames_linear currentState_linear = STOP_linear;
   stateNames_rot currentState_rot = STOP_rot;
@@ -54,5 +54,14 @@ class Follow_Circle {
 
   void update(const nav_msgs::Odometry& msg_odom);
 };
+
+inline float normAngRad(float angle) {
+  // Source: https://stackoverflow.com/a/11498248
+  angle = fmodf(angle + M_PIf32, M_PIf32 * 2.0f);
+  if (angle < 0) {
+    angle += M_PIf32 * 2.0f;
+  }
+  return angle - M_PIf32;
+}
 
 } // namespace pileec2223_move_robot

@@ -114,15 +114,8 @@ void Follow_Path::update(const nav_msgs::Odometry& msg_odom)
   double ux=0,uy=0,min_dist=0,min_dist_x=0,min_dist_y=0,alfa=0,error_dist=0,dist_to_line=0,o_dif=0,vlinx=0,vliny=0, deltavlin=0;
   double odom_rot = tf::getYaw(msg_odom.pose.pose.orientation), final_rot = tf::getYaw(follow_path2[aux2].pose.orientation);
   
-  ux = (xf-xi)/sqrt(pow(xf-xi,2) + pow(yf - yi,2));
-  uy = (yf-yi)/sqrt(pow(xf-xi,2) + pow(yf - yi,2));
-  min_dist = (xodom*uy -yodom*ux - xi*uy + yi*ux)/(ux*ux + uy*uy);
-  min_dist_x = -min_dist*uy + xodom;
-  min_dist_y = min_dist*ux + yodom;
-
   error_dist = sqrt(pow(xf-xodom,2) + pow(yf - yodom,2));
   alfa = atan2(yf-yodom,xf-xodom);
-  dist_to_line = abs(min_dist);
   
   o_dif = final_rot - odom_rot;
   
@@ -222,19 +215,13 @@ void Follow_Path::update(const nav_msgs::Odometry& msg_odom)
     }
     if(currentState_linear == MOV)
     {
-        vlinx = cos(alfa) + 2*(min_dist_x - xodom);
-        vliny = sin(alfa) + 2*(min_dist_y - yodom);
-        deltavlin = sqrt(pow(vlinx,2) + pow(vliny,2));
-        vx = V_LINEAR*((vlinx/deltavlin)*cos(odom_rot) + (vliny/deltavlin)*sin(odom_rot));
-        vy = V_LINEAR*(-(vlinx/deltavlin)*sin(odom_rot) + (vliny/deltavlin)*cos(odom_rot));
+        vx = V_LINEAR*cos(alfa - odom_rot);
+        vy = V_LINEAR*sin(alfa - odom_rot);
     }
     if(currentState_linear == MOV_DE)
     {
-        vlinx = cos(alfa) + 2*(min_dist_x - xodom);
-        vliny = sin(alfa) + 2*(min_dist_y - yodom);
-        deltavlin = sqrt(pow(vlinx,2) + pow(vliny,2));
-        vx = (V_LINEAR/SLOWDOWN)*((vlinx/deltavlin)*cos(odom_rot) + (vliny/deltavlin)*sin(odom_rot));
-        vy = (V_LINEAR/SLOWDOWN)*(-(vlinx/deltavlin)*sin(odom_rot) + (vliny/deltavlin)*cos(odom_rot));
+        vx = V_LINEAR*cos(alfa - odom_rot)/SLOWDOWN;
+        vy = V_LINEAR*sin(alfa - odom_rot)/SLOWDOWN;
     }
     
 
